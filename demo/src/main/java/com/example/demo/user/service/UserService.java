@@ -1,5 +1,6 @@
 package com.example.demo.user.service;
 
+import com.example.demo.common.dto.LoginMember;
 import com.example.demo.user.domain.User;
 import com.example.demo.user.dto.LoginRequest;
 import com.example.demo.user.dto.LoginResponse;
@@ -22,8 +23,7 @@ public class UserService {
   public LoginResponse login(LoginRequest loginRequest){
     return objectMapper.convertValue(userQueryRepository.existUser(loginRequest).orElseThrow(NotFoundUserException::new),LoginResponse.class);
   }
-  public User findById(long id){
-    return userRepository.findById(id).orElseThrow(NotFoundUserException::new);
+  public User findUser(LoginMember loginMember){
+    return userRepository.findByUuid(loginMember.getUuid()).orElseThrow(NotFoundUserException::new);
   }
-
 }
