@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -24,6 +25,7 @@ public class ToDo{
   @ManyToOne(fetch = FetchType.LAZY)
   private User user;
 
+  @Builder
   public ToDo(String title, String content, User user) {
     this.title = title;
     this.content = content;

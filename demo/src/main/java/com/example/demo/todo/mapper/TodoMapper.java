@@ -3,13 +3,11 @@ package com.example.demo.todo.mapper;
 import com.example.demo.todo.domain.ToDo;
 import com.example.demo.todo.dto.CreateTodoRequestDto;
 import com.example.demo.user.domain.User;
+import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring",injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface TodoMapper {
-
-  TodoMapper INSTANCE = Mappers.getMapper(TodoMapper.class);
 
   ToDo createRequestToDo(CreateTodoRequestDto createTodoRequestDto, User user);
 }

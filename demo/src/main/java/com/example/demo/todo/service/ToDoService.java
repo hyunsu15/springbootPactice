@@ -21,9 +21,10 @@ public class ToDoService {
   private final ToDoRepository todoRepository;
   private final UserService userService;
   private final TodoQueryService todoQueryService;
+  private final TodoMapper mapper;
   public void createTodo(LoginMember loginMember, CreateTodoRequestDto requestDto) {
     User user = userService.findUser(loginMember);
-    todoRepository.save(TodoMapper.INSTANCE.createRequestToDo(requestDto, user));
+    todoRepository.save(mapper.createRequestToDo(requestDto, user));
   }
   public void updateTodo(LoginMember loginMember, UpdateTodoRequestDto requestDto,Long toDoId) {
     ToDo toDo = todoQueryService.getToDo(loginMember,toDoId);

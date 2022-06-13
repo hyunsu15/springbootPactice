@@ -38,7 +38,8 @@ class TodoControllerTest {
   ObjectMapper objectMapper;
   @Autowired
   ToDoRepository toDoRepository;
-
+  @Autowired
+  TodoMapper mapper;
   @Autowired
   DatabaseCleanup cleanup;
   @BeforeEach
@@ -64,7 +65,7 @@ class TodoControllerTest {
   @Test
   public void updateToDoTest() throws Exception {
     User user = userRepository.save(UserTest.testUser());
-    toDoRepository.save(TodoMapper.INSTANCE.createRequestToDo(new CreateTodoRequestDto("1","1"),user));
+    toDoRepository.save(mapper.createRequestToDo(new CreateTodoRequestDto("1","1"),user));
 
     MockHttpServletResponse response = mockMvc.perform(put("/todo/{toDoId}",1L)
         .header("uuid", user.getUuid())

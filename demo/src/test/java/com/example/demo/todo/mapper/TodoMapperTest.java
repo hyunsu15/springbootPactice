@@ -26,7 +26,7 @@ class TodoMapperTest {
   public void createTodoMapperTest(){
     User user=UserTest.testUser();
     CreateTodoRequestDto createTodoRequestDto = new CreateTodoRequestDto("1","2");
-    ToDo res=Mappers.getMapper(TodoMapper.class).createRequestToDo(createTodoRequestDto,user);
+    ToDo res=new TodoMapperImpl().createRequestToDo(createTodoRequestDto,user);
     assertEquals(user.getEmail(),res.getUser().getEmail());
     assertEquals(createTodoRequestDto.getTitle(),res.getTitle());
     assertEquals("1",res.getTitle());
@@ -89,5 +89,5 @@ interface CarMapper {
   CarDto carToCarDto(Car car);
   @Mapping(source = "car.numberOfSeats", target = "seatCount")
   CarDto carToCarDto(Car car,String type);
-
 }
+
