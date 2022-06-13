@@ -2,12 +2,18 @@ package com.example.demo.todo.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
+import com.example.demo.DatabaseCleanup;
 import com.example.demo.todo.dto.CreateTodoRequestDto;
+import com.example.demo.todo.dto.UpdateTodoRequestDto;
+import com.example.demo.todo.mapper.TodoMapper;
+import com.example.demo.todo.repository.ToDoRepository;
 import com.example.demo.user.domain.User;
 import com.example.demo.user.domain.UserTest;
 import com.example.demo.user.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -30,6 +36,16 @@ class TodoControllerTest {
   UserRepository userRepository;
   @Autowired
   ObjectMapper objectMapper;
+  @Autowired
+  ToDoRepository toDoRepository;
+
+  @Autowired
+  DatabaseCleanup cleanup;
+  @BeforeEach
+  void setUp() {
+   cleanup.cleanUp();
+
+  }
 
   @Test
   public void createToDoTest() throws Exception {
@@ -42,8 +58,24 @@ class TodoControllerTest {
     ).andReturn().getResponse();
 
     assertEquals(HttpStatus.OK.value(), response.getStatus());
-    assertEquals(userRepository.findAll().size(), 1);
+    assertEquals(toDoRepository.findAll().size(), 1);
 
   }
+  @Test
+  public void updateToDoTest() throws Exception {
+    User user = userRepository.save(UserTest.testUser());
+    toDoRepository.save(TodoMapper.INSTANCE.createRequestToDo(new CreateTodoRequestDto("1","1"),user));
+
+    MockHttpServletResponse response = mockMvc.perform(put("/todo/{toDoId}",1L)
+        .header("uuid", user.getUuid())
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(new UpdateTodoRequestDto("1", "0")))
+    ).andReturn().getResponse();
+
+    assertEquals(HttpStatus.OK.value(), response.getStatus());
+    assertEquals(toDoRepository.findAll().get(0).getContent(), "0");
+
+  }
+
 }
 

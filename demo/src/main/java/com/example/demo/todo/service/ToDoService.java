@@ -2,7 +2,9 @@ package com.example.demo.todo.service;
 
 
 import com.example.demo.common.dto.LoginMember;
+import com.example.demo.todo.domain.ToDo;
 import com.example.demo.todo.dto.CreateTodoRequestDto;
+import com.example.demo.todo.dto.UpdateTodoRequestDto;
 import com.example.demo.todo.mapper.TodoMapper;
 import com.example.demo.todo.repository.ToDoRepository;
 import com.example.demo.user.domain.User;
@@ -13,14 +15,20 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ToDoService {
 
   private final ToDoRepository todoRepository;
   private final UserService userService;
-
-  @Transactional
+  private final TodoQueryService todoQueryService;
   public void createTodo(LoginMember loginMember, CreateTodoRequestDto requestDto) {
     User user = userService.findUser(loginMember);
-    todoRepository.save(TodoMapper.INSTANCE.toToDo(requestDto, user));
+    todoRepository.save(TodoMapper.INSTANCE.createRequestToDo(requestDto, user));
   }
+  public void updateTodo(LoginMember loginMember, UpdateTodoRequestDto requestDto,Long toDoId) {
+    ToDo toDo = todoQueryService.getToDo(loginMember,toDoId);
+    toDo.updateToDo(requestDto);
+
+  }
+
 }

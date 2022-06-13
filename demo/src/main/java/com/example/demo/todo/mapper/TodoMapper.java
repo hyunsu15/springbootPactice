@@ -11,5 +11,5 @@ public interface TodoMapper {
 
   TodoMapper INSTANCE = Mappers.getMapper(TodoMapper.class);
 
-  ToDo toToDo(CreateTodoRequestDto createTodoRequestDto, User user);
+  ToDo createRequestToDo(CreateTodoRequestDto createTodoRequestDto, User user);
 }

@@ -1,16 +1,14 @@
 package com.example.demo.todo.mapper;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.example.demo.todo.domain.ToDo;
 import com.example.demo.todo.dto.CreateTodoRequestDto;
 import com.example.demo.user.domain.User;
 import com.example.demo.user.domain.UserTest;
 import org.junit.jupiter.api.Test;
-import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 class TodoMapperTest {
@@ -25,21 +23,27 @@ class TodoMapperTest {
     assertEquals("a",res.getType());
   }
   @Test
-  public void todoMapperTest(){
+  public void createTodoMapperTest(){
     User user=UserTest.testUser();
     CreateTodoRequestDto createTodoRequestDto = new CreateTodoRequestDto("1","2");
-    ToDo res=Mappers.getMapper(TodoMapper.class).toToDo(createTodoRequestDto,user);
+    ToDo res=Mappers.getMapper(TodoMapper.class).createRequestToDo(createTodoRequestDto,user);
     assertEquals(user.getEmail(),res.getUser().getEmail());
     assertEquals(createTodoRequestDto.getTitle(),res.getTitle());
     assertEquals("1",res.getTitle());
-
   }
+
+
+
+
 
 }
 class Car {
 
   private String make;
   private int numberOfSeats;
+
+  public Car() {
+  }
 
   public Car(String make, int numberOfSeats) {
     this.make = make;
@@ -71,6 +75,7 @@ class CarDto {
     return type;
   }
 
+  public CarDto() {}
   public CarDto(String make, int seatCount, String type) {
     this.make = make;
     this.seatCount = seatCount;
