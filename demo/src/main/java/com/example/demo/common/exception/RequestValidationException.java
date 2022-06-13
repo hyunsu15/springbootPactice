@@ -1,6 +1,4 @@
-package com.example.demo.todo.exception;
-
-import com.example.demo.common.exception.BaseException;
+package com.example.demo.common.exception;
 
 public class RequestValidationException extends BaseException {
   private static final  String MSG = "잘못된 요청입니다.";
