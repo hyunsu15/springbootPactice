@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.example.demo.todo.domain.ToDo;
 import com.example.demo.todo.dto.CreateTodoRequestDto;
+import com.example.demo.todo.dto.ToDoResponseDto;
 import com.example.demo.user.domain.User;
 import com.example.demo.user.domain.UserTest;
 import org.junit.jupiter.api.Test;
@@ -32,6 +33,15 @@ class TodoMapperTest {
     assertEquals("1",res.getTitle());
   }
 
+  @Test
+  public void toDoToResponseDtoTest(){
+    User user=UserTest.testUser();
+    CreateTodoRequestDto createTodoRequestDto = new CreateTodoRequestDto("1","2");
+    ToDoResponseDto res = Mappers.getMapper(TodoMapper.class).toDoToResponseDto(new ToDo("1", "2", null));
+
+    assertEquals(createTodoRequestDto.getTitle(),res.getTitle());
+    assertEquals("1",res.getTitle());
+  }
 
 
 

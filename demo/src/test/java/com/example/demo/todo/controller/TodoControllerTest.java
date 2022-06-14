@@ -2,6 +2,7 @@ package com.example.demo.todo.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
@@ -88,6 +89,23 @@ class TodoControllerTest {
 
     assertEquals(HttpStatus.OK.value(), response.getStatus());
     assertEquals(toDoRepository.findAll().size(), 0);
+  }
+  @Test
+  public void readToDoTest() throws Exception {
+    for (int i = 0; i <10 ; i++) {
+      toDoRepository.save(new ToDo(""+i,""+i,user));
+    }
+
+    MockHttpServletResponse response = mockMvc.perform(get("/todo/")
+        .header("uuid", user.getUuid())
+            .param("page","0")
+            .param("size","2")
+    ).andReturn().getResponse();
+
+    assertEquals(HttpStatus.OK.value(), response.getStatus());
+    assertEquals(response.getContentAsString().indexOf('9')==-1,false);
+    assertEquals(response.getContentAsString().indexOf('1')==-1,true);
+
   }
 
 }
