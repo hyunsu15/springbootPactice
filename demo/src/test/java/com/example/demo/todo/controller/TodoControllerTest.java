@@ -1,10 +1,12 @@
 package com.example.demo.todo.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 import com.example.demo.DatabaseCleanup;
+import com.example.demo.todo.domain.ToDo;
 import com.example.demo.todo.dto.CreateTodoRequestDto;
 import com.example.demo.todo.dto.UpdateTodoRequestDto;
 import com.example.demo.todo.mapper.TodoMapper;
@@ -42,15 +44,19 @@ class TodoControllerTest {
   TodoMapper mapper;
   @Autowired
   DatabaseCleanup cleanup;
+  User user;
+  ToDo toDo;
+
   @BeforeEach
   void setUp() {
    cleanup.cleanUp();
+    user = userRepository.save(UserTest.testUser());
+    toDo=toDoRepository.save(mapper.createRequestToDo(new CreateTodoRequestDto("1","1"),user));
 
   }
 
   @Test
   public void createToDoTest() throws Exception {
-    User user = userRepository.save(UserTest.testUser());
 
     MockHttpServletResponse response = mockMvc.perform(post("/todo/")
         .header("uuid", user.getUuid())
@@ -59,14 +65,11 @@ class TodoControllerTest {
     ).andReturn().getResponse();
 
     assertEquals(HttpStatus.OK.value(), response.getStatus());
-    assertEquals(toDoRepository.findAll().size(), 1);
-
+    assertEquals(toDoRepository.findAll().size(), 2);
   }
+
   @Test
   public void updateToDoTest() throws Exception {
-    User user = userRepository.save(UserTest.testUser());
-    toDoRepository.save(mapper.createRequestToDo(new CreateTodoRequestDto("1","1"),user));
-
     MockHttpServletResponse response = mockMvc.perform(put("/todo/{toDoId}",1L)
         .header("uuid", user.getUuid())
         .contentType(MediaType.APPLICATION_JSON)
@@ -75,7 +78,16 @@ class TodoControllerTest {
 
     assertEquals(HttpStatus.OK.value(), response.getStatus());
     assertEquals(toDoRepository.findAll().get(0).getContent(), "0");
+  }
+  @Test
+  public void deleteToDoTest() throws Exception {
+    MockHttpServletResponse response = mockMvc.perform(delete("/todo/{toDoId}",1L)
+        .header("uuid", user.getUuid())
+        .contentType(MediaType.APPLICATION_JSON)
+    ).andReturn().getResponse();
 
+    assertEquals(HttpStatus.OK.value(), response.getStatus());
+    assertEquals(toDoRepository.findAll().size(), 0);
   }
 
 }

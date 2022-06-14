@@ -29,7 +29,9 @@ public class ToDoService {
   public void updateTodo(LoginMember loginMember, UpdateTodoRequestDto requestDto,Long toDoId) {
     ToDo toDo = todoQueryService.getToDo(loginMember,toDoId);
     toDo.updateToDo(requestDto);
-
   }
-
+  public void deleteTodo(LoginMember loginMember, Long toDoId) {
+    ToDo toDo = todoQueryService.getToDo(loginMember,toDoId);
+    todoRepository.delete(toDo);
+  }
 }
