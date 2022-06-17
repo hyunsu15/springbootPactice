@@ -11,11 +11,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RequiredArgsConstructor
 public class UserQueryRepository  {
-  private final JPAQueryFactory queryFactory;
+  private final JPAQueryFactory jpaQueryFactory;
  public Optional<User> existUser(LoginRequest loginRequest) {
     QUser user = QUser.user;
 
-    return queryFactory
+    return jpaQueryFactory
         .select(user)
         .from(user)
         .where(

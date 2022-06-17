@@ -15,15 +15,6 @@ import org.mapstruct.factory.Mappers;
 class TodoMapperTest {
 
   @Test
-  public void what_mapperTest(){
-    Car car = new Car("hyun",2);
-    CarDto res = Mappers.getMapper(CarMapper.class).carToCarDto(car,"a");
-
-    assertEquals(car.getMake(),res.getMake());
-    assertEquals(car.getNumberOfSeats(),res.getSeatCount());
-    assertEquals("a",res.getType());
-  }
-  @Test
   public void createTodoMapperTest(){
     User user=UserTest.testUser();
     CreateTodoRequestDto createTodoRequestDto = new CreateTodoRequestDto("1","2");
